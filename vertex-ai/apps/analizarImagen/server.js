@@ -1,10 +1,5 @@
 const fs = require("fs");
-const {VertexAI} = require('@google-cloud/vertexai');
-
-var projectId = 'projectodemos';
-var location = 'us-central1';
-var model = 'gemini-pro-vision';
-var image = 'gs://generativeai-downloads/images/scones.jpg';
+ 
 
 
 const http = require('http');
@@ -28,6 +23,9 @@ var imagen = "./images/imagen1.jpg";
 var mimeType = 'image/jpeg';
 var prompt = "what is shown in this image?";
   
+  app.get('/', function(req,res,next) {
+     res.render("analizar-imagen",{ imagen: imagen, prompt: prompt});
+  });
   app.get('/analizar-imagen', function(req,res,next) {
       res.render("analizar-imagen",{ imagen: imagen, prompt: prompt});
   });
@@ -35,47 +33,10 @@ var prompt = "what is shown in this image?";
   app.get('/analizar-imagen-query', async function(req,res,next) {
 
    prompt = req.query.prompt;
-   const contenidoImagen = await fs.readFileSync(imagen, {encoding: 'base64'});
-   // console.log(contenidoImagen);
-    
-    // For images, the SDK supports both Google Cloud Storage URI and base64 strings
-   const filePart = {
-     inlineData: {
-       data: contenidoImagen,
-       mimeType: mimeType,
-     },
-   };
-
-  const textPart = {
-     text: prompt
-  };
-
-  const request = {
-    contents: [{role: 'user', parts: [filePart, textPart]}],
-  };
    
-  // Initialize Vertex with your Cloud project and location
-const vertexAI = new VertexAI({project: projectId, location: location});
-
-// Instantiate the model
-const generativeVisionModel = vertexAI.preview.getGenerativeModel({
-  model: model,
-});
-
-   // Create the response stream
-  const responseStream =
-    await generativeVisionModel.generateContentStream(request);
-  
-    // Wait for the response stream to complete
-  const aggregatedResponse = await responseStream.response;
-
-  // Select the text from the response
-  const fullTextResponse =
-    aggregatedResponse.candidates[0].content.parts[0].text;
-
-    console.log(fullTextResponse);
-    
-    res.send(fullTextResponse);
+     // Generar Texto con AI 
+ 
+    res.send("Texto generado por AI");
   });
   
   app.post('/fileupload', function(req,res,next) {
