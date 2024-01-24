@@ -32,9 +32,10 @@ app.get('/generar-texto', function(req,res,next) {
 
 app.get('/generar-texto-query', async function(req,res,next) {
 
-textoPrompt = req.query.prompt;
+  textoPrompt = req.query.prompt;
 
   // Generar Texto con AI 
+ 
   res.send("Texto generado por AI");
 });
 
